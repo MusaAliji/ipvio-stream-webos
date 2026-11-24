@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- CI build (T-003): `.github/workflows/build.yml` runs lint, Vitest and the `.ipk` build on pull requests and pushes to `dev` and `main`, and uploads the `.ipk` as a workflow artifact. Actions pinned to commit SHAs. CI uses Node 24 (npm 11). `@emnapi/core` and `@emnapi/runtime` 2.0.0-beta.2 added as dev dependencies so the lockfile written on Windows stays valid for `npm ci` on Linux.
+- CI build (T-003): `.github/workflows/build.yml` runs lint, Vitest and the `.ipk` build on pull requests and pushes to `dev` and `main`, and uploads the `.ipk` as a workflow artifact. Actions pinned to commit SHAs. CI uses Node 24 (npm 11), and `engines` now requires Node `>=24`. `@emnapi/core` and `@emnapi/runtime` 2.0.0-beta.2 added as dev dependencies so the lockfile written on Windows stays valid for `npm ci` on Linux.
 - Repo conventions (T-002): `docs/ARCHITECTURE.md` (layers, import rules, layout, build, ADR index), pull request template with checks and 55UR80 device test steps, bug and enhancement issue forms that apply `needs-triage`.
 - Project scaffold (T-001): Vite 8 + TypeScript + Preact app with a "hello" screen, `appinfo.json` (`com.ipvio.stream.webos` 0.0.1, 1920x1080, `disableBackHistoryAPI`), icons and splash from the Android launcher icon, ESLint + Prettier, Vitest, and `npm run package` / `npm run deploy` with `ares-package` / `ares-install`.
 - Planning: port plan, parity list, project rules, glossary, ADRs 0001–0008 and 85 task files (T-000).

@@ -26,7 +26,7 @@ jobs:
         with:
           persist-credentials: false
 
-      # Node 24 (npm 11), as on the PC: npm 10 from Node 22 rejects the npm 11 lockfile in npm ci.
+      # The minimum Node version in package.json "engines" (npm 11; npm 10 rejects the lockfile).
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'

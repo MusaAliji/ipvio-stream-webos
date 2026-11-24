@@ -21,7 +21,8 @@ body:
   - type: dropdown
     id: android
     attributes:
-      label: Does the Android app (IPVIO Stream 1.4.8) have it?
+      label: Does the Android app have it?
+      description: IPVIO Stream for Android TV, the version this port follows (see `docs/PARITY.md`).
       options:
         - 'Yes, the webOS app should match Android'
         - 'No, it is new'

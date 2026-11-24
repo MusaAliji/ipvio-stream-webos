@@ -12,7 +12,7 @@ Add `docs/ARCHITECTURE.md` describing the layers (UI, logic, platform adapters, 
 
 - [x] `docs/ARCHITECTURE.md` matches the scaffold and links ADRs 0001–0008.
 - [x] PR template asks for: issue (`Closes #N`), checks run, device test steps on the 55UR80.
-- [x] New issues from the templates get `needs-triage` and `bug` or `enhancement`.
+- [x] New issues from the templates get `needs-triage` and `bug` or `enhancement`. (Set in the forms; the GitHub check runs after the templates reach `main`, see below.)
 
 ## Android reference (1.4.8, pinned to `f4a0360`)
 
@@ -43,13 +43,13 @@ Checks run on the development PC (Windows 11):
 
 What was added:
 
-- `docs/ARCHITECTURE.md`: context, the four layers (UI, features, logic, platform adapters, plus the JS service) with their import rules, repository layout with built / planned status per folder, build and packaging as done by T-001 (IIFE + classic script, `file://`, `appinfo.json`), runtime, testing, data compatibility, ADRs 0001–0008 with status, open points. Checked against the scaffold: file list, `vite.config.ts`, `tsconfig.json`, `appinfo.json`, icon sizes, scripts.
-- `.github/pull_request_template.md`: `Closes #`, checks run, device test steps on the 55UR80 with result and who ran it, docs checklist, approval items (CLAUDE.md sections 5 and 6), target `dev`.
+- `docs/ARCHITECTURE.md`: context, the four web app layers (UI, data and player, logic, platform adapters) plus the JS service with their import rules, repository layout with built / planned status per folder, build and packaging as done by T-001 (IIFE + classic script, `file://`, `appinfo.json`), runtime, testing, data compatibility, ADRs 0001–0008 (status only where the ADR file states one), open points. Checked against the scaffold: file list, `vite.config.ts`, `tsconfig.json`, `appinfo.json`, icon sizes, scripts.
+- `.github/pull_request_template.md`: `Closes #`, checks run, docs checklist, approval items (CLAUDE.md sections 4–6), target `dev`, and at the end (CLAUDE.md section 3) the device test steps on the 55UR80 with result and who ran it.
 - `.github/ISSUE_TEMPLATE/bug.yml` and `enhancement.yml`: issue forms with `labels: [bug, needs-triage]` and `[enhancement, needs-triage]`; both ask whether the Android app 1.4.8 behaves the same / has the feature. Blank issues stay allowed, so task issues created with `gh issue create --body` are unaffected.
 
 Notes for review:
 
-- The layer split follows the architecture outline in `docs/PLAN.md`; `src/data/` and `src/player/` are grouped as one "features" layer between UI and logic / platform. The import rules are checked in review only; a lint rule would be a build change and needs approval.
+- For the maintainer: the issue names four layers (UI, logic, platform adapters, JS service), but the `docs/PLAN.md` outline also has `src/data/` and `src/player/`. The doc groups them as one "data and player" layer between UI and logic / platform adapters, with its own import rules. If that grouping should be different, it is a one-section change. The import rules are checked in review only; a lint rule would be a build change and needs approval.
 - GitHub reads issue and PR templates from the default branch, so they take effect only after the next merge of `dev` into `main`.
 
 **Device test on the 55UR80:** not applicable (no app change). GitHub check, after the templates reach `main`:

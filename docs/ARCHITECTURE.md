@@ -20,9 +20,9 @@ A port of the Android IPVIO Stream app, reference version 1.4.8 (`f4a0360`), to 
  └────────────────────────────────────────────────────────┘
         │                                  │
         ▼                                  ▼
- Playlist providers (M3U, Xtream,    Phone browser on the LAN
- Stalker), TMDB / OMDb, ESPN,        (phone remote, ports 8765–8775,
- subtitle sites, Google Drive,       planned, T-063)
+ Playlist providers (source types   Phone browser on the LAN
+ M3U, Xtream, Stalker), TMDB / OMDb, (phone remote, ports 8765–8775,
+ ESPN, subtitle sites, Google Drive, planned, T-063)
  GitHub Releases
 ```
 
@@ -39,8 +39,8 @@ The web app has four layers, all in `src/`. The JS service is a separate program
  ┌───────────────────────────────────────────────┐
  │ UI           src/app/, src/ui/                │  Preact components, screens, focus
  ├───────────────────────────────────────────────┤
- │ Features     src/data/, src/player/           │  playlists, sources, guide, metadata,
- │                                               │  storage, player engines
+ │ Data and     src/data/, src/player/           │  storage, playlists, source types,
+ │ player                                        │  TV guide, metadata, player engines
  ├──────────────────────────┬────────────────────┤
  │ Logic        src/logic/  │ Platform adapters  │
  │ pure TypeScript ports    │ src/platform/      │
@@ -54,16 +54,16 @@ The web app has four layers, all in `src/`. The JS service is a separate program
 
 | Layer | What it holds | May import | Must not |
 |---|---|---|---|
-| **UI** (`src/app/`, `src/ui/`) | App shell, screen routing, overlays, components, design tokens, icons, screens | Features, logic, platform adapters, i18n | Call webOS APIs (`webOS.*`, `PalmServiceBridge`, Luna URIs) or the JS service directly |
-| **Features** (`src/data/`, `src/player/`) | Preferences mirror, IndexedDB, playlist store, sources (M3U, Xtream, Stalker), TV guide, metadata; the player engine interface and its engines | Logic, platform adapters | Import UI code |
+| **UI** (`src/app/`, `src/ui/`) | App shell, screen routing, overlays, components, design tokens, icons, screens | Data and player, logic, platform adapters, i18n | Call webOS APIs (`webOS.*`, `PalmServiceBridge`, Luna URIs) or the JS service directly |
+| **Data and player** (`src/data/`, `src/player/`) | Preferences mirror, IndexedDB, playlist store, the source types (M3U, Xtream, Stalker), TV guide, metadata; the player engine interface and its engines | Logic, platform adapters | Import UI code |
 | **Logic** (`src/logic/`) | Pure functions and state rules ported from Android, with the ported Android tests | Other logic modules only | Touch the DOM, storage, network, timers of the platform or any webOS API |
-| **Platform adapters** (`src/platform/`) | The only code that talks to webOS: Luna bus, keys, toast, lifecycle, JS service client | Logic (for pure helpers) | Import UI or feature code |
+| **Platform adapters** (`src/platform/`) | The only code that talks to webOS: Luna bus, keys, toast, lifecycle, JS service client | Logic (for pure helpers) | Import UI, data or player code |
 | **JS service** (`service/`) | HTTP proxy, phone remote server, file tasks | Node built-ins of the TV's Node version | Share code with the web app at runtime; listen on the network except for the phone remote server ([CLAUDE.md](../CLAUDE.md) section 9) |
 
 Why these rules:
 
 - **Logic stays pure** so Vitest can run the ported Android tests unchanged, without a TV or a DOM ([ADR 0002](adr/0002-hand-port-logic-with-tests-as-oracle.md)). When a screen needs a decision (sorting, filtering, what Back does), the decision is a logic function and the screen calls it.
-- **webOS access goes through adapters** so screens and features run in a desktop browser (`npm run dev`) and in tests, and so a webOS version difference is fixed in one place.
+- **webOS access goes through adapters** so screens, data and player code run in a desktop browser (`npm run dev`) and in tests, and so a webOS version difference is fixed in one place.
 - **The JS service is a separate program.** It runs on the TV's Node, which on webOS 4 is old (version recorded by T-016), so its code keeps to that language level and does not import web app modules. The web app reaches it only through the service client in `src/platform/`.
 
 The rules are checked in review for now; there is no lint rule that enforces the import directions.
@@ -77,13 +77,13 @@ The rules are checked in review for now; there is no lint rule that enforces the
 | `src/app/` | UI | `App.tsx` (placeholder hello screen: logo, title, version from `appinfo.json`), `global.css` | built (T-001); the shell and screen routing replace the hello screen in T-010 |
 | `src/ui/` | UI | Design tokens and fonts, focus and keys, components and icons, screens | planned (T-005, T-006, T-011, then per screen) |
 | `src/logic/` | Logic | Ports of the Android `*Logic.kt` files with their tests | planned (first ports in T-007, T-008) |
-| `src/data/` | Features | Preferences mirror, IndexedDB, Java `String.hashCode()`, secrets, playlist store, sources, TV guide, metadata | planned (T-008, T-009, T-019 onwards) |
-| `src/player/` | Features | `PlayerEngine` interface, native and JavaScript engines | planned (T-013, after the spike T-012) |
+| `src/data/` | Data and player | Preferences mirror, IndexedDB, Java `String.hashCode()`, secrets, playlist store, source types, TV guide, metadata | planned (T-008, T-009, T-019 onwards) |
+| `src/player/` | Data and player | `PlayerEngine` interface, native and JavaScript engines | planned (T-013, after the spike T-012) |
 | `src/platform/` | Platform adapters | Luna bus, keys, toast, lifecycle, JS service client | planned (T-006, T-010, T-016) |
 | `src/i18n/` | – | Dictionaries generated from the Android `Dict*.kt` files; never edited by hand ([ADR 0005](adr/0005-dictionaries-generated-from-android.md)) | planned (T-007) |
 | `service/` | JS service | `services.json`, `package.json`, service methods | planned (T-016) |
 | `public/` | – | Copied unchanged into `dist/`: `appinfo.json`, `icon.png` (80x80), `largeIcon.png` (130x130), `splash.png` (1920x1080) | built (T-001) |
-| `scripts/` | Build | Node scripts for the build and packaging, run on the PC only; never bundled into the app | built (T-001); `dict-to-json` in T-007 |
+| `scripts/` | Build | Node and PowerShell scripts for the build, packaging and assets, run on the PC only; never bundled into the app | built (T-001); `dict-to-json` in T-007 |
 | `docs/` | – | Plan, parity list, ADRs, task files, agent docs, this file | |
 
 `scripts/` today:
@@ -109,7 +109,7 @@ Facts about the build ([`vite.config.ts`](../vite.config.ts)):
 - **Relative URLs** (`base: './'`), because webOS serves the app from `file://`.
 - **One IIFE bundle and a classic script.** On `file://` the page origin is `null`, so Chromium refuses module scripts and `crossorigin` requests. The bundle is built as one IIFE, and `scripts/classic-script.ts` rewrites the entry to `<script defer src=…>` and drops `crossorigin` from the stylesheet. The build fails if a module script is left, so the problem shows on the PC and not only on the TV.
 - **Preact JSX** is compiled by Vite itself (`oxc.jsx` with `importSource: 'preact'`); there is no Preact Vite plugin.
-- **Build target**: still Vite's default (modern Chromium). ES5 output and polyfills for webOS 4 come with T-004, which may replace the IIFE output and the classic-script step with `@vitejs/plugin-legacy` ([ADR 0001](adr/0001-preact-typescript-stack.md), [ADR 0007](adr/0007-minimum-webos-4.md)).
+- **Build target**: still Vite's default (modern Chromium). T-004 adds `@vitejs/plugin-legacy` for ES5 output and polyfills on webOS 4 ([ADR 0001](adr/0001-preact-typescript-stack.md), [ADR 0007](adr/0007-minimum-webos-4.md)); whether the IIFE output and the classic-script step stay is decided there.
 - **Packaging** uses the webOS CLI (`@webos-tools/cli`, installed globally, not a project dependency). From T-016 the `.ipk` also contains the JS service.
 - **CI**: none yet; lint, tests and the `.ipk` build on pull requests come with T-003.
 
@@ -146,14 +146,16 @@ These are protected areas: they change only with an approved plan ([CLAUDE.md](.
 
 ## 9. Architecture decisions
 
+Status is the one written in the ADR file; "–" means the file has none.
+
 | ADR | Decision | Status |
 |---|---|---|
-| [0001](adr/0001-preact-typescript-stack.md) | Preact, TypeScript and Norigin spatial navigation, built with Vite | accepted; the legacy plugin is pending T-004 |
-| [0002](adr/0002-hand-port-logic-with-tests-as-oracle.md) | Kotlin logic hand-ported to TypeScript, the Android tests are the reference | accepted |
-| [0003](adr/0003-js-service-as-network-fallback.md) | A webOS JS service as fallback for what a browser cannot do | accepted |
-| [0004](adr/0004-storage-mirrors-android.md) | Storage mirrors Android's SharedPreferences; item ids use Java's `String.hashCode()` | accepted |
-| [0005](adr/0005-dictionaries-generated-from-android.md) | UI strings generated from the Android dictionaries, German text as key | accepted |
-| [0006](adr/0006-parity-reference-and-gaps.md) | Android 1.4.8 is the reference; every difference is a recorded gap | accepted |
+| [0001](adr/0001-preact-typescript-stack.md) | Preact, TypeScript and Norigin spatial navigation, built with Vite and the legacy plugin (the plugin arrives with T-004) | – |
+| [0002](adr/0002-hand-port-logic-with-tests-as-oracle.md) | Kotlin logic hand-ported to TypeScript, the Android tests are the reference | – |
+| [0003](adr/0003-js-service-as-network-fallback.md) | A webOS JS service as fallback for what a browser cannot do | – |
+| [0004](adr/0004-storage-mirrors-android.md) | Storage mirrors Android's SharedPreferences; item ids use Java's `String.hashCode()` | – |
+| [0005](adr/0005-dictionaries-generated-from-android.md) | UI strings generated from the Android dictionaries, German text as key | – |
+| [0006](adr/0006-parity-reference-and-gaps.md) | Android 1.4.8 is the reference; every difference is a recorded gap | – |
 | [0007](adr/0007-minimum-webos-4.md) | Minimum webOS 4.0 | accepted, to be confirmed in T-082 |
 | [0008](adr/0008-native-playback-first.md) | Native playback first, JavaScript engines only where native fails | proposed, decided by the spike T-012 |
 

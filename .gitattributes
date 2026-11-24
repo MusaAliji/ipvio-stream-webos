@@ -1,0 +1,9 @@
+# Text files are stored and checked out with LF on every platform, as Prettier expects
+# (endOfLine "lf"). Without this, core.autocrlf=true on Windows checks them out with CRLF
+# and `npm run lint` fails locally although the files in git are LF.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.ipk binary

@@ -16,7 +16,7 @@ A port of [IPVIO Stream](https://github.com/Emrodev/IPVIO-Stream), the free and 
 
 ## Development
 
-Requires Node 22.12+ and the webOS CLI (`npm install -g @webos-tools/cli`) for packaging and installing.
+Requires Node 24+ (npm 11) and the webOS CLI (`npm install -g @webos-tools/cli`) for packaging and installing.
 
 | Command | What it does |
 |---|---|

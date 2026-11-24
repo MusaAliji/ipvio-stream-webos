@@ -6,7 +6,7 @@
   "license": "GPL-3.0-only",
   "type": "module",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24"
   },
   "scripts": {
     "dev": "vite",
@@ -23,6 +23,8 @@
     "preact": "10.29.8"
   },
   "devDependencies": {
+    "@emnapi/core": "2.0.0-beta.2",
+    "@emnapi/runtime": "2.0.0-beta.2",
     "@eslint/js": "10.0.1",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",

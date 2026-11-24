@@ -1,0 +1,56 @@
+name: Build
+
+# Lint, type check, unit tests and the .ipk build on pull requests and on pushes to dev and main.
+# The .ipk is uploaded as a workflow artifact. Actions are pinned to commit SHAs.
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # The minimum Node version in package.json "engines" (npm 11; npm 10 rejects the lockfile).
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Packaging tool, installed globally as on the PC (not a project dependency, see docs/ARCHITECTURE.md).
+      - name: Install webOS CLI
+        run: npm install -g @webos-tools/cli@3.2.6
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      # Type check, vite build, then ares-package into out/.
+      - name: Build .ipk
+        run: npm run package
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ipvio-stream-webos-ipk
+          path: out/*.ipk
+          if-no-files-found: error

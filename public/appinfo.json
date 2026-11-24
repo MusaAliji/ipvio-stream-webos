@@ -1,0 +1,15 @@
+{
+  "id": "com.ipvio.stream.webos",
+  "version": "0.0.1",
+  "vendor": "IPVIO",
+  "type": "web",
+  "main": "index.html",
+  "title": "IPVIO Stream",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "splashBackground": "splash.png",
+  "bgColor": "#01040E",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true,
+  "requiredACG": []
+}

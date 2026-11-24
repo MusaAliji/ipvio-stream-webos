@@ -1,6 +1,6 @@
 # T-002 Repo conventions: architecture doc, PR and issue templates
 
-**Status:** ready-for-agent  
+**Status:** in review  
 **Issue:** #2  
 **Milestone:** M0 Scaffold
 
@@ -10,9 +10,9 @@ Add `docs/ARCHITECTURE.md` describing the layers (UI, logic, platform adapters, 
 
 ## Acceptance criteria
 
-- [ ] `docs/ARCHITECTURE.md` matches the scaffold and links ADRs 0001–0008.
-- [ ] PR template asks for: issue (`Closes #N`), checks run, device test steps on the 55UR80.
-- [ ] New issues from the templates get `needs-triage` and `bug` or `enhancement`.
+- [x] `docs/ARCHITECTURE.md` matches the scaffold and links ADRs 0001–0008.
+- [x] PR template asks for: issue (`Closes #N`), checks run, device test steps on the 55UR80.
+- [x] New issues from the templates get `needs-triage` and `bug` or `enhancement`.
 
 ## Android reference (1.4.8, pinned to `f4a0360`)
 
@@ -33,4 +33,27 @@ Low.
 
 ## Test results
 
-_Filled in by the PR: checks run, device test on the 55UR80._
+Checks run on the development PC (Windows 11):
+
+- `npx eslint .`: pass.
+- `npx prettier --check --end-of-line auto .`: pass. Plain `npm run lint` fails on this clone because `core.autocrlf=true` checked the T-001 files out with CRLF while Prettier expects LF; the files are LF in git, so CI and LF clones are not affected. Not caused by this task (see `WORK_STATE.md`).
+- `npm run typecheck`: pass.
+- `npm test`: 2 files, 7 tests pass (no code changed).
+- `npm run build` and `npm run package`: pass, `out/com.ipvio.stream.webos_0.0.1_all.ipk`.
+
+What was added:
+
+- `docs/ARCHITECTURE.md`: context, the four layers (UI, features, logic, platform adapters, plus the JS service) with their import rules, repository layout with built / planned status per folder, build and packaging as done by T-001 (IIFE + classic script, `file://`, `appinfo.json`), runtime, testing, data compatibility, ADRs 0001–0008 with status, open points. Checked against the scaffold: file list, `vite.config.ts`, `tsconfig.json`, `appinfo.json`, icon sizes, scripts.
+- `.github/pull_request_template.md`: `Closes #`, checks run, device test steps on the 55UR80 with result and who ran it, docs checklist, approval items (CLAUDE.md sections 5 and 6), target `dev`.
+- `.github/ISSUE_TEMPLATE/bug.yml` and `enhancement.yml`: issue forms with `labels: [bug, needs-triage]` and `[enhancement, needs-triage]`; both ask whether the Android app 1.4.8 behaves the same / has the feature. Blank issues stay allowed, so task issues created with `gh issue create --body` are unaffected.
+
+Notes for review:
+
+- The layer split follows the architecture outline in `docs/PLAN.md`; `src/data/` and `src/player/` are grouped as one "features" layer between UI and logic / platform. The import rules are checked in review only; a lint rule would be a build change and needs approval.
+- GitHub reads issue and PR templates from the default branch, so they take effect only after the next merge of `dev` into `main`.
+
+**Device test on the 55UR80:** not applicable (no app change). GitHub check, after the templates reach `main`:
+
+1. New issue on GitHub: the chooser offers "Bug report" and "Enhancement".
+2. Submit a test bug: it gets `bug` and `needs-triage`. Submit a test enhancement: it gets `enhancement` and `needs-triage`. Close both.
+3. Open a PR: the body is prefilled with the template.

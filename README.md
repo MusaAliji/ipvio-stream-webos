@@ -5,6 +5,7 @@ A port of [IPVIO Stream](https://github.com/Emrodev/IPVIO-Stream), the free and 
 **Status: planning.** Nothing is installable yet. The first sideload release (v0.1.0) is planned after milestone M5.
 
 - Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md)
+- Architecture: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - What differs from Android and why: [`docs/PARITY.md`](docs/PARITY.md)
 - Tasks: [`docs/tasks/README.md`](docs/tasks/README.md) and the [issues](https://github.com/MusaAliji/ipvio-stream-webos/issues) / [milestones](https://github.com/MusaAliji/ipvio-stream-webos/milestones)
 

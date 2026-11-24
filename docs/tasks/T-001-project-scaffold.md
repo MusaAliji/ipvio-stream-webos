@@ -11,7 +11,7 @@ Create the app skeleton: Vite + TypeScript + Preact, `appinfo.json` (id `com.ipv
 ## Acceptance criteria
 
 - [x] `npm run build` produces `dist/` and `npm run package` an `.ipk`.
-- [ ] `npm run deploy` installs and launches a "hello" screen on the 55UR80.
+- [x] `npm run deploy` installs and launches a "hello" screen on the 55UR80.
 - [x] `npm test` runs Vitest; `npm run lint` passes.
 - [x] appinfo uses the app id `com.ipvio.stream.webos` and version 0.0.1.
 
@@ -50,7 +50,7 @@ Notes for review:
 - For approval (CLAUDE.md §6): dependencies `preact` 10.29.8; dev `vite` 8.3.8, `vitest` 5.1.1, `typescript` 6.0.3 (typescript-eslint supports `<6.1`), `eslint` 10.15.0, `@eslint/js`, `typescript-eslint`, `eslint-config-prettier`, `globals`, `prettier` 3.10.1. No `@preact/preset-vite` (Vite 8 compiles Preact JSX itself). `ares-*` come from the global `@webos-tools/cli`.
 - For approval (build): the bundle is one IIFE and `scripts/classic-script.ts` rewrites `index.html` to a classic deferred script, because webOS loads apps from `file://`, where module scripts are refused. The build fails if a module script survives. The build target is still Vite's default (the bundle uses `??=`), so webOS 4 needs T-004, which may replace this with `@vitejs/plugin-legacy`.
 
-**Not run:** `npm run deploy` on the 55UR80 (installing on the TV waits for the maintainer). Device test steps:
+**Device test on the 55UR80:** run by the maintainer with the steps below: passed; dependencies and the build rewrite approved.
 
 1. Turn on the 55UR80 with Developer Mode on; check `ares-device -i -d lgtv` answers.
 2. `npm run deploy`.

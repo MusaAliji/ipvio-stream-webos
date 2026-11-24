@@ -16,4 +16,10 @@ describe('toClassicScript', () => {
 
     expect(toClassicScript(html)).toBe('<link rel="stylesheet" href="./assets/index-Cd2.css">');
   });
+
+  it('fails the build when a module script it does not recognise is left', () => {
+    const html = '<script crossorigin type="module" src="./assets/index-Ab1.js"></script>';
+
+    expect(() => toClassicScript(html)).toThrow(/module script/);
+  });
 });

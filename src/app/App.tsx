@@ -8,7 +8,7 @@ import appinfo from '../../public/appinfo.json';
 export function App() {
   return (
     <main class="hello">
-      <img class="hello__logo" src="./largeIcon.png" alt="" width={130} height={130} />
+      <img class="hello__logo" src={`./${appinfo.largeIcon}`} alt="" width={130} height={130} />
       <h1 class="hello__title">{appinfo.title}</h1>
       <p class="hello__version">{appinfo.version}</p>
     </main>

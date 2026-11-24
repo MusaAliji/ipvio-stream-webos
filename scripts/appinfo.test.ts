@@ -12,7 +12,6 @@ describe('appinfo.json', () => {
   });
 
   it('carries the package version', () => {
-    expect(appinfo.version).toBe('0.0.1');
     expect(appinfo.version).toBe(pkg.version);
   });
 

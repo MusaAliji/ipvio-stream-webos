@@ -32,6 +32,8 @@ jobs:
           node-version: '24'
           cache: npm
 
+      # Fails with "Missing: @emnapi/core ... from lock file" when npm on Windows has dropped the
+      # optional @emnapi/core and @emnapi/runtime entries from package-lock.json (see docs/tasks/T-003-ci-build.md).
       - name: Install dependencies
         run: npm ci
 

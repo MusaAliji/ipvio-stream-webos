@@ -38,7 +38,7 @@ Checks run:
 - GitHub Actions, workflow "Build" on PR #89 into `dev` (run 45488735732, commit `dd9ae5c`): every step green: `npm ci`, webOS CLI install, `npm run lint` (ESLint + Prettier), `npm test` (2 files, 7 tests), `npm run package`, artifact upload.
 - Artifact `ipvio-stream-webos-ipk` downloaded with `gh run download`: contains `com.ipvio.stream.webos_0.0.1_all.ipk` (91 KB, `ar` archive).
 - Actions pinned to the commit SHAs of their latest releases: `actions/checkout` v7.0.1, `actions/setup-node` v7.1.0, `actions/upload-artifact` v7.0.2.
-- On the development PC (Windows 11): `npx eslint .`, `npx prettier --check .github/workflows/build.yml`, `npm run typecheck`, `npm test`, `npm run package`: pass. Plain `npm run lint` still fails on this clone only because of CRLF checkout (`core.autocrlf=true`, see `WORK_STATE.md`); CI checks out LF and passes.
+- On the development PC (Windows 11): `npx eslint .`, `npx prettier --check .github/workflows/build.yml`, `npm run typecheck`, `npm test`, `npm run package`: pass. Plain `npm run lint` failed on this clone only because of CRLF checkout (`core.autocrlf=true`); on the maintainer's decision `.gitattributes` (`* text=auto eol=lf`, images and `.ipk` binary) now makes every clone check out LF, and after re-checkout `npm run lint` passes on the PC.
 
 What the first CI runs found, and the fixes:
 

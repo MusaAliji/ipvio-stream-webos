@@ -1,0 +1,36 @@
+name: Enhancement
+description: Something the webOS app should do, for example a feature the Android app has.
+labels: [enhancement, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This app is a port of IPVIO Stream for Android TV. Features come from the Android app first; differences from Android are listed in `docs/PARITY.md`.
+  - type: textarea
+    id: what
+    attributes:
+      label: What should the app do
+      description: Name the screen and the remote keys involved.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Optional. What it would make easier.
+  - type: dropdown
+    id: android
+    attributes:
+      label: Does the Android app have it?
+      description: IPVIO Stream for Android TV, the version this port follows (see `docs/PARITY.md`).
+      options:
+        - 'Yes, the webOS app should match Android'
+        - 'No, it is new'
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: android-reference
+    attributes:
+      label: Where on Android
+      description: Optional. The Android screen or setting, or a link to the Android code or issue.

@@ -1,0 +1,71 @@
+name: Bug report
+description: Something in the webOS app does not work, or works differently from the Android app.
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please remove playlist links, user names, passwords, MAC addresses and API keys from everything you paste.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw. Name the screen and the remote keys you pressed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Press …
+        3. See …
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: '0.0.1'
+    validations:
+      required: true
+  - type: input
+    id: tv
+    attributes:
+      label: TV model and webOS version
+      placeholder: LG 55UR80003LJ, webOS 23
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How the app was installed
+      options:
+        - Developer Mode (ares-install)
+        - Homebrew Channel
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: android
+    attributes:
+      label: Does the Android app do the same?
+      description: IPVIO Stream for Android TV, the version this port follows (see `docs/PARITY.md`).
+      options:
+        - Not tried
+        - Android behaves the same way
+        - Android works as expected
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Screenshots or logs
+      description: Optional. Photos of the screen help too.

@@ -1,0 +1,35 @@
+/* Scaffold styles (T-001). Design tokens arrive with T-005. */
+html,
+body {
+  margin: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #01040e;
+  color: #ffffff;
+  font-family: sans-serif;
+}
+
+#app {
+  height: 100%;
+}
+
+.hello {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.hello__title {
+  margin: 32px 0 0;
+  font-size: 64px;
+  font-weight: 600;
+}
+
+.hello__version {
+  margin: 16px 0 0;
+  font-size: 28px;
+  opacity: 0.6;
+}

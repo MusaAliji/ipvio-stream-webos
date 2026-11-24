@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.ipk
+.env
+secrets.json
+.idea/
+.vscode/
+*.stackdump
+.DS_Store
